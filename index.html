@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse: Österreichs Nachkriegskultur & Das SPÖ-Netzwerk</title>
+    <style>
+        :root {
+            --bg-dark: #08080a;
+            --card-bg: rgba(15, 15, 20, 0.92);
+            --accent-red: #d90429;
+            --accent-gold: #ef233c;
+            --highlight-gold: #d4af37;
+            --text-main: #edf2f4;
+            --text-muted: #8d99ae;
+            --border-glow: rgba(217, 4, 41, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(217, 4, 41, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(212, 175, 55, 0.08) 0%, transparent 45%);
+        }
+
+        .slider-container {
+            position: relative;
+            width: 95vw;
+            max-width: 1300px;
+            height: 88vh;
+            max-height: 850px;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            backdrop-filter: blur(25px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px var(--border-glow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            padding: 18px 35px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .header h1 {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-red);
+            font-weight: 700;
+        }
+
+        .slide-counter {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-family: monospace;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .slides-wrapper {
+            position: relative;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(40px) scale(0.98);
+            padding: 30px 45px;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0) scale(1);
+        }
+
+        .slide-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 16px;
+            max-height: 100%;
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+
+        .slide-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .slide-content::-webkit-scrollbar-thumb {
+            background: var(--accent-red);
+            border-radius: 4px;
+        }
+
+        .tag {
+            display: inline-block;
+            align-self: flex-start;
+            padding: 4px 14px;
+            background: rgba(217, 4, 41, 0.18);
+            color: var(--accent-red);
+            border: 1px solid var(--accent-red);
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .slide h2 {
+            font-size: 1.8rem;
+            line-height: 1.25;
+            color: #fff;
+            background: linear-gradient(45deg, #ffffff, #c0c0d0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide p {
+            font-size: 0.98rem;
+            line-height: 1.6;
+            color: var(--text-main);
+        }
+
+        .slide ul {
+            list-style-type: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .slide ul li {
+            position: relative;
+            padding-left: 20px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #d0d0e0;
+        }
+
+        .slide ul li::before {
+            content: "■";
+            position: absolute;
+            left: 0;
+            color: var(--accent-red);
+            font-size: 0.7rem;
+            top: 2px;
+        }
+
+        .highlight-box {
+            background: rgba(212, 175, 55, 0.08);
+            border-left: 3px solid var(--highlight-gold);
+            padding: 12px 18px;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: #e0e0d0;
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+
+        .slide-image-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-height: 520px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: #111;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: contrast(105%) brightness(95%);
+            transition: transform 0.5s ease;
+        }
+
+        .slide.active .slide-image-container img:hover {
+            transform: scale(1.03);
+        }
+
+        /* Responsive multi-photo layout for specific slides */
+        .image-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 6px;
+            width: 100%;
+            height: 100%;
+            padding: 6px;
+            background: #000;
+        }
+
+        .image-grid-2 .grid-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 6px;
+        }
+
+        .image-grid-2 .grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 3D Cube Styles */
+        .cube-scene {
+            width: 100%;
+            height: 100%;
+            min-height: 380px;
+            perspective: 1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cube {
+            width: 260px;
+            height: 260px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            border: 2px solid rgba(217, 4, 41, 0.6);
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.9);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(217, 4, 41, 0.3);
+            backface-visibility: visible;
+        }
+
+        .cube-face img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cube-face .face-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.85);
+            color: #fff;
+            font-size: 0.8rem;
+            padding: 6px;
+            text-align: center;
+            font-weight: 700;
+            border-top: 1px solid var(--accent-red);
+        }
+
+        .cube-face.front  { transform: rotateY(0deg) translateZ(130px); }
+        .cube-face.back   { transform: rotateY(180deg) translateZ(130px); }
+        .cube-face.right  { transform: rotateY(90deg) translateZ(130px); }
+        .cube-face.left   { transform: rotateY(-90deg) translateZ(130px); }
+        .cube-face.top    { transform: rotateX(90deg) translateZ(130px); }
+        .cube-face.bottom { transform: rotateX(-90deg) translateZ(130px); }
+
+        /* Side cubes for slide 13 (one left, stack of two right) */
+        .cube-scene.side-cube {
+            min-height: 260px;
+        }
+
+        .cube-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            height: 100%;
+        }
+
+        .cube-stack .cube-scene.side-cube {
+            flex: 1;
+            min-height: 200px;
+        }
+
+        .cube.small {
+            width: 170px;
+            height: 170px;
+        }
+
+        .cube-face.small {
+            width: 170px;
+            height: 170px;
+        }
+
+        .cube-face.small .face-label {
+            font-size: 0.68rem;
+            padding: 4px;
+        }
+
+        .cube-face.small.front  { transform: rotateY(0deg) translateZ(85px); }
+        .cube-face.small.back   { transform: rotateY(180deg) translateZ(85px); }
+        .cube-face.small.right  { transform: rotateY(90deg) translateZ(85px); }
+        .cube-face.small.left   { transform: rotateY(-90deg) translateZ(85px); }
+        .cube-face.small.top    { transform: rotateX(90deg) translateZ(85px); }
+        .cube-face.small.bottom { transform: rotateX(-90deg) translateZ(85px); }
+
+
+        .image-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px 16px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.95));
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            text-align: right;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .controls {
+            padding: 16px 35px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-btns {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            padding: 9px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.88rem;
+            transition: all 0.25s ease;
+        }
+
+        .btn:hover {
+            background: var(--accent-red);
+            border-color: var(--accent-red);
+            box-shadow: 0 0 15px rgba(217, 4, 41, 0.4);
+        }
+
+        .dots {
+            display: flex;
+            gap: 6px;
+            max-width: 50%;
+            overflow-x: auto;
+            padding: 4px;
+        }
+
+        .dot {
+            min-width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--accent-red);
+            min-width: 20px;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 950px) {
+            .slide {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+                gap: 15px;
+                padding: 20px;
+            }
+            .slide-image-container {
+                max-height: 220px;
+            }
+            .slide h2 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="slider-container">
+    <div class="header">
+        <h1>Österreichs Nachkriegskultur & Das SPÖ-Netzwerk</h1>
+        <div class="slide-counter" id="counter">Slide 01 / 12</div>
+    </div>
+
+    <div class="slides-wrapper">
+        
+        <!-- Slide 1: Das Vakuum nach 1945 -->
+        <div class="slide active">
+            <div class="slide-content">
+                <span class="tag">Strukturelle Diagnose</span>
+                <h2>1. Das Vakuum nach 1945</h2>
+                <p>Nach der Vernichtung existierte im Nachkriegs-Österreich kein tragfähiges intellektuelles Fundament mehr.</p>
+                <div class="highlight-box">
+                    „Ein kriminoid-subversives Prekariats- und Subkulturmilieu besetzte das Vakuum und verkaufte sich als neue intellektuelle Avantgarde.“
+                </div>
+                <p>Diese vermeintliche Geisteselite weiste eine direkte Kontiguität zum organisierten Verbrechen, der Pornografie und dem Rotlichtmilieu auf.</p>
+            </div>
+            <div class="slide-image-container">
+                <img src="Riesenrad.jpg" alt="Wiener Riesenrad" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Wiener_Riesenrad_2018.jpg/1200px-Wiener_Riesenrad_2018.jpg'">
+                <div class="image-caption">Wiener Riesenrad: Symbol des Nachkriegs-Wien & Schauplatz aus „Der Dritte Mann“</div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Aktionismus & Otto Mühl -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="tag">Kriminelle Avantgarde</span>
+                <h2>2. Otto Mühl & Der Wiener Aktionismus</h2>
+                <p>Der Wiener Aktionismus wurde vom staatlich geförderten Kulturbetrieb zur intellektuellen Befreiungskunst hochstilisiert.</p>
+                <ul>
+                    <li><strong>Struktureller Sadismus:</strong> Mühl gründete die Friedrichshof-Kommune (AA-Kommune), die sich als totalitäres Sekten- und Ausbeutungssystem entpuppte.</li>
+                    <li><strong>Justizielle Verurteilung:</strong> Mühl wurde wegen Kindesmissbrauchs, Vergewaltigung und schweren Sittlichkeitsdelikten verurteilt.</li>
+                </ul>
+                <div class="highlight-box">
+                    Dass Mühl jahrzehntelang von der Wiener Kulturszene als Befreier gefeiert wurde, offenbart die moralische Fäulnis dieses Milieus.
+                </div>
+            </div>
+            <div class="slide-image-container">
+                <img src="otto-muehl-vater-unser-102-1920x1080.jpg" alt="Otto Mühl Aktionismus" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Otto_Muehl_2005.jpg/800px-Otto_Muehl_2005.jpg'">
+                <div class="image-caption">Otto Mühl: Wiener Aktionismus & inszenierter Exzess („Vater Unser“)</div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Der Fall Jack Unterweger -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="tag">Häfpoesie & Mord</span>
+                <h2>3. Jack Unterweger: Der geschätzte Häfpoet</h2>
+                <p>Der verurteilte Frauenmörder wurde im Gefängnis durch die Fürsprache der Wiener Schickeria (u.a. Erika Pluhar) zum literarischen Genie hochgeschrieben.</p>
+                <ul>
+                    <li><strong>ORF & Kulturbetrieb:</strong> Nach seiner vorzeitigen Entlassung wurde der Serienmörder als Paradebeispiel gelungener Resozialisierung hofiert.</li>
+                    <li><strong>Blutige Realität:</strong> Während er in Talkshows auftrat, ermordete er im Rotlichtmilieu von Wien, Graz und Los Angeles weitere Prostituierte bestialisch.</li>
+                </ul>
+            </div>
+            <div class="slide-image-container">
+                <img src="unterweger.jpg" alt="Jack Unterweger" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Jack_Unterweger.jpg/800px-Jack_Unterweger.jpg'">
+                <div class="image-caption">Jack Unterweger: Liebling der Wiener Schickeria & Serienmörder</div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Bernhard & Artmann -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="tag">Literatur als Spektakel</span>
+                <h2>4. H.C. Artmann & Thomas Bernhard</h2>
+                <p><strong>H.C. Artmann:</strong> Erhob Dialekt- und Sprachspielereien zum pseudo-intellektuellen Kult und stützte die Romantisierung des Wiener Unterwelt-Jargons.</p>
+                <p><strong>Thomas Bernhard:</strong> Lebte vom kalkulierten Dauerskandal. Bernhard war kein systemischer Analytiker, sondern inszenierte seine Nestbeschmutzung als lukratives Geschäftsmodell.</p>
+                <div class="highlight-box">
+                    Man wusste exakt, wie man den österreichischen Staat finanziell melken und gleichzeitig theatralisch beschimpfen konnte.
+                </div>
+            </div>
+            <div class="slide-image-container">
+                <img src="bernhard.jpeg" alt="Thomas Bernhard" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Thomas_Bernhard_1970.jpg/800px-Thomas_Bernhard_1970.jpg'">
+                <div class="image-caption">Thomas Bernhard: Skandal-Strategie und staatliche Alimentierung</div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Ernst Fuchs & Die Wiener Schule -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="tag">Bildende Kunst</span>
+                <h2>5. Ernst Fuchs: Mystiker & Hurenbock</h2>
+                <p>Ernst Fuchs und die Wiener Schule des Phantastischen Realismus besaßen unbestreitbares handwerkliches Können, doch ihr Habitus war pure Hochstapelei.</p>
+                <ul>
+                    <li><strong>Exhibitionismus:</strong> Fuchs inszenierte sich als mystischer Prophet, lebte jedoch eine sexuelle Obsession im Pelzmantel aus.</li>
+                    <li><strong>Die Hütteldorfer Villa:</strong> Kein Ort des intellektuellen Diskurses, sondern ein neobarockes Bordell-Szenario mit direkter Brücke zur Wiener Halbwelt.</li>
+                </ul>
+            </div>
+            <div class="slide-image-container">
+                <img src="fuchs.jpg" alt="Ernst Fuchs" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Ernst_Fuchs_2012.jpg/800px-Ernst_Fuchs_2012.jpg'">
+                <div class="image-caption">Ernst Fuchs: Inszenierter Prophet und Patron der Wiener Schule</div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Der Club 45 - Die Machtbörse -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="tag">Politik & Halbwelt</span>
+                <h2>6. Der Club 45: Die informelle Machtzentrale</h2>
+                <p>Gegründet im Café Demel von Udo Proksch, wurde der <strong>Club 45</strong> zum Synonym für die unheilvolle Verfilzung der SPÖ-Führungsriege mit der Halbwelt.</p>
+                <ul>
+                    <li><strong>Die SPÖ-Elite vor Ort:</strong> Minister, Bürger- und Kanzlerkandidaten trafen hier auf Zuhälter, Waffennhändler und Künstlertypen.</li>
+                    <li><strong>Informelles Kartell:</strong> Hier wurden Posten besetzt, Geschäfte an der Justiz vorbeigeschleust und Provokationskünstler geschützt.</li>
+                </ul>
+            </div>
+            <div class="slide-image-container">
+                <img src="https://i.ds.at/eq4tlw/c:1200:820:fp:0.500:0.500/rs:fill:615:0/plain/lido-images/2024/12/29/7e25c75e-6920-479b-a107-ffab0c02334b.jpeg" alt="Udo Proksch und Heinz Fischer im Club 45" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Cafe_Demel_Wien.jpg/1200px-Cafe_Demel_Wien.jpg'">
+                <div class="image-caption">Udo Proksch und Heinz Fischer im Club 45 (Café Demel)</div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Das SPÖ-Netzwerk im Fall Lucona -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="tag">Der Lucona-Skandal</span>
+                <h2>7. Der Fall Lucona: Das SPÖ-Netzwerk</h2>
+                <p>Der Untergang des Frachters <em>Lucona</em> (6 Tote) zur Erpressung von Versicherungsgeldern legte die tiefen Verstrickungen der SPÖ offen.</p>
+                <div class="highlight-box">
+                    Udo Proksch genoss jahrelang den absoluten Schutz höchster SPÖ-Politiker, die Ermittlungen behinderten und Gefälligkeiten erwiesen.
+                </div>
+                <p>Erst nach jahrelangem politischen und justiziellen Abwehrkampf brach das Netzwerk zusammen – es folgte die Demission führender Köpfe.</p>
+            </div>
+            <div class="slide-image-container">
+                <img src="fischer-pluhar.jpg" alt="Heinz Fischer und Erika Pluhar" onerror="this.src='https://tv.orf.at/program/orf2/stoeckl-2309-pluhar-fischer100~_v-epg__small__16__9_-b30663deff5630f32a0208e3ad4f8215ecfed184.jpg'">
+                <div class="image-caption">Heinz Fischer & Erika Pluhar: Die Schickeria-Verbindungen des Systems</div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Die Akteure: Fischer, Proksch, Gratz, Blecha -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="tag">Protektionssystem</span>
+                <h2>8. Die Akteure des Lucona-Komplexes</h2>
+                <ul>
+                    <li><strong>Udo Proksch:</strong> Netzwerker, Club-45-Macher und sechsfacher Mörder. Das Bindeglied zwischen Wiener Szene, Kunst und SPÖ-Führung.</li>
+                    <li><strong>Leopold Gratz:</strong> SPÖ-Außenminister & Nationalratspräsident. Musste wegen Gefälligkeitsbriefen für Proksch zurücktreten.</li>
+                    <li><strong>Karl Blecha:</strong> SPÖ-Innenminister. Wegen Vertuschung von Beweismitteln im Fall Lucona gerichtlich verurteilt.</li>
+                    <li><strong>Heinz Fischer:</strong> Damaliger SPÖ-Klubobmann und Proksch-Bekannter aus dem Club 45.</li>
+                </ul>
+            </div>
+            <div class="slide-image-container">
+                <div class="image-grid-2">
+                    <div class="grid-item">
+                        <img src="fischer.jpeg" alt="Heinz Fischer" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Heinz_Fischer_2014.jpg/400px-Heinz_Fischer_2014.jpg'">
+                        <div class="grid-item-label">Heinz Fischer</div>
+                    </div>
+                    <div class="grid-item">
+                        <img src="blecha.jpeg" alt="Karl Blecha" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Karl_Blecha_2015.jpg/400px-Karl_Blecha_2015.jpg'">
+                        <div class="grid-item-label">Karl Blecha</div>
+                    </div>
+                    <div class="grid-item">
+                        <img src="gratz.jpeg" alt="Leopold Gratz" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Leopold_Gratz_1985.jpg/400px-Leopold_Gratz_1985.jpg'">
+                        <div class="grid-item-label">Leopold Gratz</div>
+                    </div>
+                    <div class="grid-item">
+                        <img src="proksch.jpeg" alt="Udo Proksch" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Udo_Proksch.jpg/400px-Udo_Proksch.jpg'">
+                        <div class="grid-item-label">Udo Proksch</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Austropop: Danzer & Hirsch -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="tag">Strikzi-Romantik</span>
+                <h2>9. Austropop I: Danzer & Ludwig Hirsch</h2>
+                <p>Die Austropop-Szene lieferte die musikalische Romantisierung des Wiener Prekariats und der Halbwelt.</p>
+                <ul>
+                    <li><strong>Georg Danzer:</strong> Lieferte mit dem „Nackerten im Hawelka“ oder Songs über Zuhälter die passende Folklore für die Wiener Subkultur.</li>
+                    <li><strong>Ludwig Hirsch:</strong> Vermarktete morbide Ästhetik, Depression und Suff als tiefe Philosophie – im Kern die Ausbeutung asozialer Weinerlichkeit.</li>
+                </ul>
+            </div>
+            <div class="slide-image-container">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Georg_Danzer_2006.jpg/800px-Georg_Danzer_2006.jpg" alt="Georg Danzer" onerror="this.src='https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1000&q=80'">
+                <div class="image-caption">Georg Danzer: Vertonung der Wiener Halbwelt & Cafe-Hawelka-Szene</div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Drahdiwaberl & Falco -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="tag">Exzess auf der Bühne</span>
+                <h2>10. Stefan Weber (Drahdiwaberl) & Falco</h2>
+                <p>Bei Drahdiwaberl kollabierten Musik, Pornografie und Fäkalhumor auf der Bühne im Namen vorgeblicher Systemkritik.</p>
+                <ul>
+                    <li><strong>Stefan Weber:</strong> Exzessive Bühnenshows mit Schlamm, Splatter und Obszönitäten ergötzten das bürgerlich-linke Publikum.</li>
+                    <li><strong>Falco (Johann Hölzel):</strong> Entstieg als Bassist von Drahdiwaberl direkt der Wiener Club- und Drogenszene und wurde zum globalen Exportgut.</li>
+                </ul>
+            </div>
+            <div class="slide-image-container">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/cyGb6Kalw3o" title="Drahdiwaberl Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="border:0; width:100%; height:100%;"></iframe>
+                <div class="image-caption">Drahdiwaberl live: Exzess, Obszönität & Wiener Subkultur-Spektakel</div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Ostbahn-Kurti & Kottan -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="tag">Verharmlosung</span>
+                <h2>11. Ostbahn-Kurti & Lukas Resetarits</h2>
+                <p><strong>Willi Resetarits (Ostbahn-Kurti):</strong> Die Kunstfigur gab dem kleinkriminellen Strikzi-Milieu ein sympathisches, heiteres Gesicht.</p>
+                <p><strong>Lukas Resetarits & Kottan ermittelt:</strong> Im Kabarett und im Fernsehen wurde die komplette Korruption und Unfähigkeit von Justiz und Polizei ins Lächerliche gezogen und dadurch systemisch verharmlost.</p>
+            </div>
+            <div class="slide-image-container">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/rshw1SbC-xo" title="Ostbahn Kurti Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="border:0; width:100%; height:100%;"></iframe>
+                <div class="image-caption">Ostbahn-Kurti & die Chefpartie live: Vorstadt-Romantik & Strikzi-Folklore</div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Die Herrschaft des Gesindels -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="tag">Gesamtschau</span>
+                <h2>12. Fazit: Die Herrschaft des Gesindels</h2>
+                <p>Österreich besaß nach dem Krieg keine echte Geisteselite, sondern ein Machtkartell aus Provokations-Künstlern, Halbwelt-Akteuren und SPÖ-Politikern.</p>
+                <div class="highlight-box">
+                    Weil die Funktionäre oft selbst zweifelhaften Verhältnissen entstammten, sahen sie in den Strikzi-Romantikern und Exzess-Künstlern ihre natürlichen Verbündeten.
+                </div>
+                <p>Geld, Medienmacht des ORF und gegenseitige politische Immunität schufen einen Zustand, der das Land kulturell bis heute prägt.</p>
+            </div>
+            <div class="slide-image-container" style="justify-content: center; background: #050507;">
+                <img src="gesindel.jpg" alt="SPÖ-Machtnetzwerk Akteure" style="object-fit: contain; max-height: 440px;" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Parliament_Vienna_2018.jpg/1200px-Parliament_Vienna_2018.jpg'">
+                <div class="image-caption">Das österreichische Nachkriegssystem: Eine symbiosische Bilanz</div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Interaktiver Kultur-Würfel -->
+        <div class="slide" style="grid-template-columns: 0.62fr 1.3fr 0.62fr; align-items: stretch;">
+            <div class="cube-stack">
+                <div class="cube-scene side-cube" id="cubeScene">
+                    <div class="cube small" id="photoCube">
+                        <div class="cube-face small front">
+                            <img src="niavarani.jpg" alt="Michael Niavarani">
+                            <div class="face-label">Michael Niavarani</div>
+                        </div>
+                        <div class="cube-face small back">
+                            <img src="hader.jpg" alt="Josef Hader">
+                            <div class="face-label">Josef Hader</div>
+                        </div>
+                        <div class="cube-face small right">
+                            <img src="steinbaecker.jpg" alt="Gert Steinbäcker">
+                            <div class="face-label">Gert Steinbäcker</div>
+                        </div>
+                        <div class="cube-face small left">
+                            <img src="danzer.jpg" alt="Georg Danzer">
+                            <div class="face-label">Georg Danzer</div>
+                        </div>
+                        <div class="cube-face small top">
+                            <img src="heller.jpg" alt="André Heller">
+                            <div class="face-label">André Heller</div>
+                        </div>
+                        <div class="cube-face small bottom">
+                            <img src="pluhar.jpg" alt="Erika Pluhar">
+                            <div class="face-label">Erika Pluhar</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cube-scene side-cube" id="cubeScene4">
+                    <div class="cube small" id="photoCube4">
+                        <div class="cube-face small front">
+                            <img src="lukasresetarits.jpg" alt="Lukas Resetarits">
+                            <div class="face-label">Lukas Resetarits</div>
+                        </div>
+                        <div class="cube-face small back">
+                            <img src="schmidinger.jpg" alt="Dolores Schmidinger">
+                            <div class="face-label">Dolores Schmidinger</div>
+                        </div>
+                        <div class="cube-face small right">
+                            <img src="priklopil.jpg" alt="Wolfgang Přiklopil">
+                            <div class="face-label">Wolfgang Přiklopil</div>
+                        </div>
+                        <div class="cube-face small left">
+                            <img src="mutzenbacher.jpg" alt="Josefine Mutzenbacher">
+                            <div class="face-label">Josefine Mutzenbacher</div>
+                        </div>
+                        <div class="cube-face small top">
+                            <img src="dohnal.jpg" alt="Johanna Dohnal">
+                            <div class="face-label">Johanna Dohnal</div>
+                        </div>
+                        <div class="cube-face small bottom">
+                            <img src="merkatz.jpg" alt="Edmund Sackbauer (Karl Merkatz)">
+                            <div class="face-label">Edmund Sackbauer</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-content">
+                <span class="tag">Kultur-Prominenz</span>
+                <h2>13. 3D-Galerie: Prominenz & Milieu</h2>
+                <p>Seit 45 ist das Kulturleben der Alpenrepublik durch politisch willfährige Dilettanten monopolisiert, die den Mächtigen nicht nur die Schuhe lecken.</p>
+                <ul>
+                    <li><strong>Michael Niavarani & Josef Hader:</strong> Komplexbeladene weit jenseits der Midlife-Crisis, die glauben, ihre Psychosen würden das Publikum interessieren.</li>
+                    <li><strong>Gert Steinbäcker (STS):</strong> Hymnen der Austropop-Nostalgie.</li>
+                    <li><strong>Georg Danzer:</strong> Austropop-Legende & Chronist der Wiener Halbwelt.</li>
+                    <li><strong>André Heller & Erika Pluhar:</strong> Wiener Schickeria, Kultur-Subventionen & Salon-Avantgarde.</li>
+                    <li><strong>Jelinek, Bernhard & Unterweger:</strong> Literaturbetrieb zwischen Nestbeschmutzung, Skandal und Häfpoesie.</li>
+                    <li><strong>Ernst Fuchs, Stefan Weber & Falco:</strong> Exzess auf Leinwand und Bühne, von der Halbwelt exportiert.</li>
+                    <li><strong>Ostbahn-Kurti & Lukas Resetarits:</strong> Verharmlosende Vorstadt-Folklore statt Systemkritik.</li>
+                    <li><strong>Josef Fritzl & Heinz Fischer:</strong> Das Grauen im Keller und die politische Fassade darüber.</li>
+                    <li><strong>Dolores Schmidinger & Johanna Dohnal:</strong> Zwischen Kabarett-Diva und der einzigen echten Reformerin im System.</li>
+                    <li><strong>Přiklopil, Mutzenbacher & Sackbauer:</strong> Verbrechen, erotische Fiktion und Wiener Vorstadt-Mythos in einer Vitrine.</li>
+                </ul>
+            </div>
+            <div class="cube-stack">
+                <div class="cube-scene side-cube" id="cubeScene2">
+                    <div class="cube small" id="photoCube2">
+                        <div class="cube-face small front">
+                            <img src="jelinek.jpg" alt="Elfriede Jelinek">
+                            <div class="face-label">Elfriede Jelinek</div>
+                        </div>
+                        <div class="cube-face small back">
+                            <img src="bernhard2.jpg" alt="Thomas Bernhard">
+                            <div class="face-label">Thomas Bernhard</div>
+                        </div>
+                        <div class="cube-face small right">
+                            <img src="unterweger.jpg" alt="Jack Unterweger">
+                            <div class="face-label">Jack Unterweger</div>
+                        </div>
+                        <div class="cube-face small left">
+                            <img src="fuchs.jpg" alt="Ernst Fuchs">
+                            <div class="face-label">Ernst Fuchs</div>
+                        </div>
+                        <div class="cube-face small top">
+                            <img src="stefanweber2.jpg" alt="Stefan Weber">
+                            <div class="face-label">Stefan Weber</div>
+                        </div>
+                        <div class="cube-face small bottom">
+                            <img src="falco.jpg" alt="Falco">
+                            <div class="face-label">Falco</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cube-scene side-cube" id="cubeScene3">
+                    <div class="cube small" id="photoCube3">
+                        <div class="cube-face small front">
+                            <img src="ostbahnkurti.jpg" alt="Ostbahn-Kurti (Willi Resetarits)">
+                            <div class="face-label">Ostbahn-Kurti</div>
+                        </div>
+                        <div class="cube-face small back">
+                            <img src="lukasresetarits.jpg" alt="Lukas Resetarits">
+                            <div class="face-label">Lukas Resetarits</div>
+                        </div>
+                        <div class="cube-face small right">
+                            <img src="bernhard2.jpg" alt="Thomas Bernhard">
+                            <div class="face-label">Thomas Bernhard</div>
+                        </div>
+                        <div class="cube-face small left">
+                            <img src="fuchs.jpg" alt="Ernst Fuchs">
+                            <div class="face-label">Ernst Fuchs</div>
+                        </div>
+                        <div class="cube-face small top">
+                            <img src="fritzl.webp" alt="Josef Fritzl">
+                            <div class="face-label">Josef Fritzl</div>
+                        </div>
+                        <div class="cube-face small bottom">
+                            <img src="fischer2.jpg" alt="Heinz Fischer">
+                            <div class="face-label">Heinz Fischer</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="controls">
+        <div class="nav-btns">
+            <button class="btn" id="prevBtn">❮ Zurück</button>
+            <button class="btn" id="nextBtn">Weiter ❯</button>
+        </div>
+        <div class="dots" id="dotsContainer"></div>
+    </div>
+</div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const counter = document.getElementById('counter');
+    const dotsContainer = document.getElementById('dotsContainer');
+
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+
+    // Build Dots
+    slides.forEach((_, idx) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (idx === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => goToSlide(idx));
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function updateSlide() {
+        slides.forEach((slide, idx) => {
+            slide.classList.toggle('active', idx === currentSlide);
+        });
+
+        dots.forEach((dot, idx) => {
+            dot.classList.toggle('active', idx === currentSlide);
+        });
+
+        counter.textContent = `Slide ${String(currentSlide + 1).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+    }
+
+    function goToSlide(index) {
+        currentSlide = index;
+        updateSlide();
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateSlide();
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        updateSlide();
+    }
+
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'Space') {
+            nextSlide();
+        } else if (e.key === 'ArrowLeft') {
+            prevSlide();
+        }
+    });
+
+    // 3D Cube Rotation Logic (auto-rotate, overridden by mouse control)
+    function setupCube(sceneId, cubeId, startX, startY) {
+        const scene = document.getElementById(sceneId);
+        const cube = document.getElementById(cubeId);
+        if (!scene || !cube) return null;
+
+        const state = { rotX: startX, rotY: startY, autoRotate: true };
+
+        scene.addEventListener('mousemove', (e) => {
+            state.autoRotate = false;
+            const rect = scene.getBoundingClientRect();
+            const x = e.clientX - rect.left - (rect.width / 2);
+            const y = e.clientY - rect.top - (rect.height / 2);
+
+            state.rotY = (x / rect.width) * 180;
+            state.rotX = -(y / rect.height) * 180;
+        });
+
+        scene.addEventListener('mouseleave', () => {
+            state.autoRotate = true;
+        });
+
+        return { cube, state };
+    }
+
+    const cubes = [
+        setupCube('cubeScene', 'photoCube', -15, 25),
+        setupCube('cubeScene2', 'photoCube2', -15, -25),
+        setupCube('cubeScene3', 'photoCube3', 20, 60),
+        setupCube('cubeScene4', 'photoCube4', 10, -50)
+    ].filter(Boolean);
+
+    function animateCubes(time) {
+        cubes.forEach(({ cube, state }, i) => {
+            if (state.autoRotate) {
+                state.rotY += 1.4;
+                state.rotX += 1.4;
+            }
+            const bounceY = Math.sin(time / 500 + i * 2) * 25;
+            cube.style.transform = `translateY(${bounceY}px) rotateX(${state.rotX}deg) rotateY(${state.rotY}deg)`;
+        });
+        requestAnimationFrame(animateCubes);
+    }
+    requestAnimationFrame(animateCubes);
+</script>
+</body>
+</html>
+
