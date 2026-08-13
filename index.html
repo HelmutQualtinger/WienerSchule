@@ -28,10 +28,11 @@
             color: var(--text-main);
             overflow: hidden;
             height: 100vh;
+            height: 100dvh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-image: 
+            background-image:
                 radial-gradient(circle at 15% 15%, rgba(217, 4, 41, 0.12) 0%, transparent 45%),
                 radial-gradient(circle at 85% 85%, rgba(212, 175, 55, 0.08) 0%, transparent 45%);
         }
@@ -41,6 +42,7 @@
             width: 95vw;
             max-width: 1300px;
             height: 88vh;
+            height: 88dvh;
             max-height: 850px;
             background: var(--card-bg);
             border: 1px solid rgba(255, 255, 255, 0.12);
@@ -115,6 +117,8 @@
             gap: 16px;
             max-height: 100%;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
             padding-right: 15px;
         }
 
@@ -299,6 +303,11 @@
         .cube-face.bottom { transform: rotateX(-90deg) translateZ(130px); }
 
         /* Side cubes for slide 13 (one left, stack of two right) */
+        .slide.quad-slide {
+            grid-template-columns: 0.62fr 1.3fr 0.62fr;
+            align-items: stretch;
+        }
+
         .cube-scene.side-cube {
             min-height: 260px;
         }
@@ -408,7 +417,7 @@
 
         @media (max-width: 950px) {
             .slide {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr !important;
                 grid-template-rows: auto 1fr;
                 gap: 15px;
                 padding: 20px;
@@ -418,6 +427,42 @@
             }
             .slide h2 {
                 font-size: 1.4rem;
+            }
+            .slide.quad-slide {
+                grid-template-rows: auto auto auto;
+                row-gap: 15px;
+            }
+            .slide.quad-slide .cube-stack {
+                flex-direction: row;
+                height: 130px;
+                overflow: hidden;
+            }
+            .slide.quad-slide .cube-scene.side-cube {
+                min-height: 130px;
+                flex: 1;
+            }
+            .slide.quad-slide .cube.small,
+            .slide.quad-slide .cube-face.small {
+                width: 80px;
+                height: 80px;
+            }
+            .slide.quad-slide .cube-face.small.front  { transform: rotateY(0deg) translateZ(40px); }
+            .slide.quad-slide .cube-face.small.back   { transform: rotateY(180deg) translateZ(40px); }
+            .slide.quad-slide .cube-face.small.right  { transform: rotateY(90deg) translateZ(40px); }
+            .slide.quad-slide .cube-face.small.left   { transform: rotateY(-90deg) translateZ(40px); }
+            .slide.quad-slide .cube-face.small.top    { transform: rotateX(90deg) translateZ(40px); }
+            .slide.quad-slide .cube-face.small.bottom { transform: rotateX(-90deg) translateZ(40px); }
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                padding: 12px 16px;
+            }
+            .header h1 {
+                font-size: 0.8rem;
+            }
+            .controls {
+                padding: 10px 16px;
             }
         }
     </style>
@@ -654,7 +699,7 @@
         </div>
 
         <!-- Slide 13: Interaktiver Kultur-Würfel -->
-        <div class="slide" style="grid-template-columns: 0.62fr 1.3fr 0.62fr; align-items: stretch;">
+        <div class="slide quad-slide">
             <div class="cube-stack">
                 <div class="cube-scene side-cube" id="cubeScene">
                     <div class="cube small" id="photoCube">
@@ -860,6 +905,24 @@
             prevSlide();
         }
     });
+
+    // Touch swipe navigation (mobile)
+    const slidesWrapper = document.querySelector('.slides-wrapper');
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    slidesWrapper.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].clientX;
+        touchStartY = e.changedTouches[0].clientY;
+    }, { passive: true });
+
+    slidesWrapper.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        const dy = e.changedTouches[0].clientY - touchStartY;
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+            if (dx < 0) nextSlide(); else prevSlide();
+        }
+    }, { passive: true });
 
     // 3D Cube Rotation Logic (auto-rotate, overridden by mouse control)
     function setupCube(sceneId, cubeId, startX, startY) {
