@@ -418,7 +418,7 @@
         @media (max-width: 950px) {
             .slide {
                 grid-template-columns: 1fr !important;
-                grid-template-rows: auto 1fr;
+                grid-template-rows: minmax(0, 1fr) 220px;
                 gap: 15px;
                 padding: 20px;
             }
@@ -427,6 +427,9 @@
             }
             .slide h2 {
                 font-size: 1.4rem;
+            }
+            .slide-content {
+                justify-content: flex-start;
             }
             .slide.quad-slide {
                 grid-template-rows: auto auto auto;
