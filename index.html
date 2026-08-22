@@ -18,15 +18,18 @@
     <meta name="twitter:description" content="Interaktive Analyse: Kulturbetrieb, Halbwelt und das SPÖ-Netzwerk im Nachkriegs-Österreich.">
     <meta name="twitter:image" content="https://helmutqualtinger.github.io/WienerSchule/slide13-social-preview.png">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap');
+
         :root {
-            --bg-dark: #08080a;
-            --card-bg: rgba(15, 15, 20, 0.92);
-            --accent-red: #d90429;
-            --accent-gold: #ef233c;
-            --highlight-gold: #d4af37;
-            --text-main: #edf2f4;
-            --text-muted: #8d99ae;
-            --border-glow: rgba(217, 4, 41, 0.35);
+            --bg-dark: #100d08;
+            --card-bg: rgba(24, 20, 14, 0.95);
+            --accent-red: #b23a24;
+            --accent-gold: #c9a227;
+            --highlight-gold: #d4a017;
+            --text-main: #e8dcc0;
+            --text-muted: #a89468;
+            --border-glow: rgba(201, 162, 39, 0.3);
+            --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
         }
 
         * {
@@ -36,7 +39,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            font-family: 'Courier Prime', 'Courier New', monospace;
             background-color: var(--bg-dark);
             color: var(--text-main);
             overflow: hidden;
@@ -46,8 +49,8 @@
             justify-content: center;
             align-items: center;
             background-image:
-                radial-gradient(circle at 15% 15%, rgba(217, 4, 41, 0.12) 0%, transparent 45%),
-                radial-gradient(circle at 85% 85%, rgba(212, 175, 55, 0.08) 0%, transparent 45%);
+                radial-gradient(circle at 15% 15%, rgba(178, 58, 36, 0.14) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(201, 162, 39, 0.1) 0%, transparent 45%);
         }
 
         .slider-container {
@@ -58,40 +61,59 @@
             height: 88dvh;
             max-height: 850px;
             background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 16px;
+            border: 2px solid var(--accent-gold);
+            border-radius: 3px;
             backdrop-filter: blur(25px);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px var(--border-glow);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px var(--border-glow), inset 0 0 0 1px rgba(0,0,0,0.6);
             overflow: hidden;
             display: flex;
             flex-direction: column;
         }
 
+        .slider-container::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 50;
+            pointer-events: none;
+            background-image:
+                repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0px, rgba(0,0,0,0.18) 1px, transparent 1px, transparent 3px),
+                var(--noise);
+            background-size: 100% 100%, 120px 120px;
+            mix-blend-mode: overlay;
+            opacity: 0.1;
+        }
+
         .header {
             padding: 18px 35px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 2px solid var(--accent-gold);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
         }
 
         .header h1 {
-            font-size: 1.1rem;
+            font-family: 'Special Elite', 'Courier Prime', monospace;
+            font-size: 1.05rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--accent-red);
-            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--highlight-gold);
+            font-weight: 400;
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.6);
         }
 
         .slide-counter {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            font-family: monospace;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 4px 12px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.82rem;
+            color: var(--accent-red);
+            font-family: 'Special Elite', monospace;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 5px 14px;
+            border-radius: 2px;
+            border: 2px solid var(--accent-red);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transform: rotate(-2deg);
         }
 
         .slides-wrapper {
@@ -146,11 +168,12 @@
         .tag {
             display: inline-block;
             align-self: flex-start;
-            padding: 4px 14px;
-            background: rgba(217, 4, 41, 0.18);
-            color: var(--accent-red);
-            border: 1px solid var(--accent-red);
-            border-radius: 20px;
+            padding: 3px 12px;
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--accent-gold);
+            border: 1px dashed var(--accent-gold);
+            border-radius: 2px;
+            font-family: 'Courier Prime', monospace;
             font-size: 0.72rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -158,12 +181,12 @@
         }
 
         .slide h2 {
-            font-size: 1.8rem;
-            line-height: 1.25;
-            color: #fff;
-            background: linear-gradient(45deg, #ffffff, #c0c0d0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-family: 'Special Elite', 'Courier Prime', monospace;
+            font-size: 1.6rem;
+            line-height: 1.3;
+            font-weight: 400;
+            color: var(--highlight-gold);
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
         }
 
         .slide p {
@@ -181,30 +204,31 @@
 
         .slide ul li {
             position: relative;
-            padding-left: 20px;
+            padding-left: 22px;
             font-size: 0.95rem;
             line-height: 1.5;
-            color: #d0d0e0;
+            color: #d6c9a0;
         }
 
         .slide ul li::before {
-            content: "■";
+            content: "»";
             position: absolute;
             left: 0;
             color: var(--accent-red);
-            font-size: 0.7rem;
-            top: 2px;
+            font-weight: 700;
+            top: 0;
         }
 
         .highlight-box {
-            background: rgba(212, 175, 55, 0.08);
+            background: rgba(201, 162, 39, 0.08);
             border-left: 3px solid var(--highlight-gold);
             padding: 12px 18px;
-            border-radius: 0 8px 8px 0;
-            font-style: italic;
-            color: #e0e0d0;
-            font-size: 0.92rem;
-            line-height: 1.5;
+            border-radius: 0 3px 3px 0;
+            font-family: 'Special Elite', monospace;
+            font-style: normal;
+            color: #ece0bf;
+            font-size: 0.88rem;
+            line-height: 1.55;
         }
 
         .slide-image-container {
@@ -212,10 +236,10 @@
             width: 100%;
             height: 100%;
             max-height: 520px;
-            border-radius: 12px;
+            border-radius: 3px;
             overflow: hidden;
             box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 2px solid var(--accent-gold);
             background: #111;
             display: flex;
             flex-direction: column;
@@ -225,12 +249,50 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: contrast(105%) brightness(95%);
+            filter: sepia(35%) contrast(108%) brightness(90%) saturate(75%);
             transition: transform 0.5s ease;
         }
 
         .slide.active .slide-image-container img:hover {
             transform: scale(1.03);
+        }
+
+        .slide-image-container::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            background-image: var(--noise);
+            background-size: 120px 120px;
+            mix-blend-mode: overlay;
+            opacity: 0.18;
+        }
+
+        .slides-wrapper {
+            counter-reset: aktenr;
+        }
+
+        .slide {
+            counter-increment: aktenr;
+        }
+
+        .slide-image-container::before {
+            content: "Akte Nr. " counter(aktenr, decimal-leading-zero);
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            z-index: 3;
+            padding: 3px 10px;
+            border: 2px solid var(--accent-red);
+            color: var(--accent-red);
+            background: rgba(0, 0, 0, 0.4);
+            font-family: 'Special Elite', monospace;
+            font-size: 0.66rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transform: rotate(-7deg);
+            pointer-events: none;
         }
 
         /* Responsive multi-photo layout for specific slides */
@@ -248,13 +310,31 @@
         .image-grid-2 .grid-item {
             position: relative;
             overflow: hidden;
-            border-radius: 6px;
+            border-radius: 2px;
+            border: 1px solid var(--accent-gold);
         }
 
         .image-grid-2 .grid-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            filter: sepia(35%) contrast(108%) brightness(90%) saturate(75%);
+        }
+
+        .grid-item-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 4px 8px;
+            background: rgba(0, 0, 0, 0.75);
+            color: var(--accent-gold);
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.7rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-top: 1px solid var(--accent-red);
         }
 
         /* 3D Cube Styles */
@@ -280,11 +360,11 @@
             position: absolute;
             width: 260px;
             height: 260px;
-            border: 2px solid rgba(217, 4, 41, 0.6);
-            border-radius: 8px;
+            border: 2px solid rgba(201, 162, 39, 0.6);
+            border-radius: 2px;
             overflow: hidden;
             background: rgba(0, 0, 0, 0.9);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(217, 4, 41, 0.3);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(178, 58, 36, 0.3);
             backface-visibility: visible;
         }
 
@@ -292,6 +372,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            filter: sepia(35%) contrast(108%) brightness(90%) saturate(75%);
         }
 
         .cube-face .face-label {
@@ -300,11 +381,14 @@
             left: 0;
             right: 0;
             background: rgba(0, 0, 0, 0.85);
-            color: #fff;
-            font-size: 0.8rem;
+            color: var(--accent-gold);
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.78rem;
             padding: 6px;
             text-align: center;
             font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             border-top: 1px solid var(--accent-red);
         }
 
@@ -365,21 +449,23 @@
             bottom: 0;
             left: 0;
             right: 0;
+            z-index: 3;
             padding: 10px 16px;
             background: linear-gradient(transparent, rgba(0,0,0,0.95));
             color: var(--text-muted);
-            font-size: 0.78rem;
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.76rem;
             text-align: right;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(201, 162, 39, 0.15);
         }
 
         .controls {
             padding: 16px 35px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 2px solid var(--accent-gold);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
         }
 
         .nav-btns {
@@ -388,21 +474,25 @@
         }
 
         .btn {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #fff;
-            padding: 9px 20px;
-            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--accent-gold);
+            color: var(--text-main);
+            padding: 8px 20px;
+            border-radius: 2px;
             cursor: pointer;
-            font-weight: 600;
-            font-size: 0.88rem;
+            font-family: 'Special Elite', monospace;
+            font-weight: 400;
+            font-size: 0.84rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             transition: all 0.25s ease;
         }
 
         .btn:hover {
             background: var(--accent-red);
             border-color: var(--accent-red);
-            box-shadow: 0 0 15px rgba(217, 4, 41, 0.4);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(178, 58, 36, 0.4);
         }
 
         .dots {
@@ -416,8 +506,8 @@
         .dot {
             min-width: 8px;
             height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            background: rgba(201, 162, 39, 0.25);
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -425,7 +515,7 @@
         .dot.active {
             background: var(--accent-red);
             min-width: 20px;
-            border-radius: 4px;
+            border-radius: 2px;
         }
 
         @media (max-width: 950px) {
@@ -488,7 +578,7 @@
 <div class="slider-container">
     <div class="header">
         <h1>Österreichs Nachkriegskultur & Das SPÖ-Netzwerk</h1>
-        <div class="slide-counter" id="counter">Slide 01 / 12</div>
+        <div class="slide-counter" id="counter">Akte 01 / 12</div>
     </div>
 
     <div class="slides-wrapper">
@@ -678,7 +768,7 @@
                 </ul>
             </div>
             <div class="slide-image-container">
-                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/cyGb6Kalw3o" title="Drahdiwaberl Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="border:0; width:100%; height:100%;"></iframe>
+                <iframe width="100%" height="100%" src="https://www.youtube-nocookie.com/embed/cyGb6Kalw3o" title="Drahdiwaberl Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="border:0; width:100%; height:100%;"></iframe>
                 <div class="image-caption">Drahdiwaberl live: Exzess, Obszönität & Wiener Subkultur-Spektakel</div>
             </div>
         </div>
@@ -692,7 +782,7 @@
                 <p><strong>Lukas Resetarits & Kottan ermittelt:</strong> Im Kabarett und im Fernsehen wurde die komplette Korruption und Unfähigkeit von Justiz und Polizei ins Lächerliche gezogen und dadurch systemisch verharmlost.</p>
             </div>
             <div class="slide-image-container">
-                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/rshw1SbC-xo" title="Ostbahn Kurti Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="border:0; width:100%; height:100%;"></iframe>
+                <iframe width="100%" height="100%" src="https://www.youtube-nocookie.com/embed/rshw1SbC-xo" title="Ostbahn Kurti Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="border:0; width:100%; height:100%;"></iframe>
                 <div class="image-caption">Ostbahn-Kurti & die Chefpartie live: Vorstadt-Romantik & Strizzi-Folklore</div>
             </div>
         </div>
@@ -892,7 +982,7 @@
             dot.classList.toggle('active', idx === currentSlide);
         });
 
-        counter.textContent = `Slide ${String(currentSlide + 1).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+        counter.textContent = `Akte ${String(currentSlide + 1).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
     }
 
     function goToSlide(index) {
